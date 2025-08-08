@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Actions\Locale\CreateLocaleAction;
 use App\Actions\Locale\DeleteLocaleAction;
