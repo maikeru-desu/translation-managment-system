@@ -50,7 +50,3 @@ A Laravel-based Translation Management Service API for storing, retrieving, and 
 - **GET/PUT/DELETE /api/translations/{id}**: Get/Update/Delete translation
 - **GET /api/translations/search**: Search translations
 - **GET /api/translations/export**: Export translations as nested JSON
-
-## License
-
-MIT License
