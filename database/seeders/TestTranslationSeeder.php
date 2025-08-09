@@ -11,7 +11,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-final class LargeTranslationSeeder extends Seeder
+final class TestTranslationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -23,23 +23,13 @@ final class LargeTranslationSeeder extends Seeder
         $locales = $this->ensureLocalesExist();
         $tags = $this->ensureTagsExist();
 
-        $this->command->info('Starting to seed translations...');
-
-        $count = $this->command->ask('How many translations would you like to seed?', 100000);
-
+        $count = 500;
         $chunkSize = 1000;
         $chunks = (int) ceil($count / $chunkSize);
 
-        $bar = $this->command->getOutput()->createProgressBar($chunks);
-        $bar->start();
-
         for ($i = 0; $i < $chunks; $i++) {
             $this->seedChunk($locales, $tags, $chunkSize, $i * $chunkSize);
-            $bar->advance();
         }
-
-        $bar->finish();
-        $this->command->info("\nSeeded {$count} translations successfully!");
 
         Translation::reguard();
     }
@@ -50,7 +40,6 @@ final class LargeTranslationSeeder extends Seeder
     private function ensureLocalesExist(): Collection
     {
         if (Locale::count() === 0) {
-            $this->command->info('Creating default locales...');
 
             $locales = [
                 ['code' => 'en', 'name' => 'English', 'is_active' => true],
@@ -74,7 +63,6 @@ final class LargeTranslationSeeder extends Seeder
     private function ensureTagsExist(): Collection
     {
         if (Tag::count() === 0) {
-            $this->command->info('Creating default tags...');
 
             $tags = [
                 ['name' => 'frontend', 'description' => 'Frontend translations'],
@@ -100,10 +88,9 @@ final class LargeTranslationSeeder extends Seeder
      */
     private function seedChunk(Collection $locales, Collection $tags, int $chunkSize, int $offset): void
     {
-        $translations = [];
         $pivotData = [];
 
-        DB::transaction(function () use ($locales, $tags, $chunkSize, $offset, &$translations, &$pivotData) {
+        DB::transaction(function () use ($locales, $tags, $chunkSize, $offset, &$pivotData) {
             for ($i = 0; $i < $chunkSize; $i++) {
                 $index = $offset + $i;
                 $localeId = $locales->random()->id;

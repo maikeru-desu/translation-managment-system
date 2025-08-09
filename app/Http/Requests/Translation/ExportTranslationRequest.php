@@ -30,22 +30,4 @@ final class ExportTranslationRequest extends FormRequest
             'tag_ids.*' => ['integer', 'exists:tags,id'],
         ];
     }
-
-    /**
-     * Get default values for request parameters.
-     *
-     * @return array
-     */
-    protected function prepareForValidation(): void
-    {
-        // Default format to 'flat' if not provided
-        if (! $this->has('format')) {
-            $this->merge(['format' => 'flat']);
-        }
-
-        // Default include_tags to false if not provided
-        if (! $this->has('include_tags')) {
-            $this->merge(['include_tags' => false]);
-        }
-    }
 }
